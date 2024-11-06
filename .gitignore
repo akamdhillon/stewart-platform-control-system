@@ -1,1 +1,26 @@
-motorControl
+# Compiled files and build directories
+/build/
+/Debug/
+/Release/
+*.bin
+*.elf
+*.hex
+*.map
+*.o
+*.d
+
+# IDE specific files (for example, STM32CubeIDE, Keil, IAR)
+.project
+.cproject
+.settings/
+*.launch
+*.uvoptx
+*.uvprojx
+*.eww
+*.ewp
+*.ewd
+*.ewt
+
+# Flash and RAM ID files
+motorControl/STM32F401RETX_FLASH.ld
+motorControl/STM32F401RETX_RAM.ld
