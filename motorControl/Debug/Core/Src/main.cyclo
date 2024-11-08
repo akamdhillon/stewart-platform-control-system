@@ -1,0 +1,14 @@
+main.c:82:5:__io_putchar	1
+main.c:90:5:_write	3
+main.c:111:5:main	1
+main.c:209:6:SystemClock_Config	3
+main.c:256:13:MX_I2C1_Init	2
+main.c:290:13:MX_TIM1_Init	5
+main.c:356:13:MX_TIM3_Init	4
+main.c:405:13:MX_TIM4_Init	4
+main.c:454:13:MX_USART2_UART_Init	2
+main.c:485:13:MX_DMA_Init	1
+main.c:503:13:MX_GPIO_Init	1
+main.c:540:6:StartDefaultTask	1
+main.c:559:6:HAL_TIM_PeriodElapsedCallback	5
+main.c:584:6:Error_Handler	1

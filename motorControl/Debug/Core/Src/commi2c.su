@@ -1,0 +1,5 @@
+../Core/Src/commi2c.c:29:6:HAL_I2C_SlaveTxCpltCallback	16	static
+../Core/Src/commi2c.c:34:6:HAL_I2C_SlaveRxCpltCallback	16	static
+../Core/Src/commi2c.c:40:6:PrepareDataToSend	4	static
+../Core/Src/commi2c.c:47:6:StartI2CSendTask	16	static
+../Core/Src/commi2c.c:62:6:StartI2CReceiveTask	16	static

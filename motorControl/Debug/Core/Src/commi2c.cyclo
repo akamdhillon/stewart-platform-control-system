@@ -1,0 +1,5 @@
+commi2c.c:29:6:HAL_I2C_SlaveTxCpltCallback	1
+commi2c.c:34:6:HAL_I2C_SlaveRxCpltCallback	1
+commi2c.c:40:6:PrepareDataToSend	1
+commi2c.c:47:6:StartI2CSendTask	2
+commi2c.c:62:6:StartI2CReceiveTask	2

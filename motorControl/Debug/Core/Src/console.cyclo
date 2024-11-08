@@ -1,0 +1,9 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	1
+basic_string.h:6568:3:int std::__cxx11::stoi(const string&, std::size_t*, int)	1
+console.cpp:34:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	3
+console.cpp:49:6:void processCommand(std::string)	13
+console.cpp:101:6:void StartConsoleTask(const void*)	9
+string_conversions.h:63:2:)::_Save_errno::_Save_errno() [with _TRet = long int; _Ret = int; _CharT = char; _Base = {int}]	1
+string_conversions.h:64:2:)::_Save_errno::~_Save_errno() [with _TRet = long int; _Ret = int; _CharT = char; _Base = {int}]	2
+string_conversions.h:73:4:)::_Range_chk::_S_chk(_TRet, std::true_type) [with _TRet = long int; _Ret = int; _CharT = char; _Base = {int}]	1
+string_conversions.h:54:5:) [with _TRet = long int; _Ret = int; _CharT = char; _Base = {int}]	4
