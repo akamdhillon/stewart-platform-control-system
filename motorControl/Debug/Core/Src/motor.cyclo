@@ -1,6 +1,0 @@
-motor.cpp:27:1:StepperMotor::StepperMotor(GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t, TIM_HandleTypeDef*, uint32_t)	1
-motor.cpp:36:6:void StepperMotor::setTarget(int)	1
-motor.cpp:41:6:void StepperMotor::setSpeed(int)	7
-motor.cpp:69:6:void StartMotorControlTask(const void*)	1
-motor.cpp:76:1:void __static_initialization_and_destruction_0(int, int)	3
-motor.cpp:76:1:cpp)	1

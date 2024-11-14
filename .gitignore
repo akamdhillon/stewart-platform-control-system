@@ -24,3 +24,5 @@
 # Flash and RAM ID files
 motorControl/STM32F401RETX_FLASH.ld
 motorControl/STM32F401RETX_RAM.ld
+
+motorControl/Debug/
