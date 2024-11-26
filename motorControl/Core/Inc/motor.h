@@ -36,6 +36,7 @@ public:
     volatile int* stepPtr;
     volatile int* dirPtr;
     volatile int* isMovingPtr;
+    int currentSpeed;
 
     // Constructor to initialize GPIO ports, pins, and PWM timer
     StepperMotor(GPIO_TypeDef* enablePort_, uint16_t enablePin_,
@@ -43,6 +44,7 @@ public:
 			volatile int* isMoving_, volatile int* stepPtr_, volatile int* dirPtr_);
     void init();
     void setTarget(int steps);
+    void setSpeed(int sp);
     void start();
     void stop();
     void setDirection(int dir);

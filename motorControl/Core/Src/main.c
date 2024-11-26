@@ -48,9 +48,7 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart2;
 
 osThreadId defaultTaskHandle;
-osThreadId I2CSendTaskHandle;
 osThreadId ConsoleTaskHandle;
-osThreadId I2CReceiveTaskHandle;
 osThreadId MotorControlTasHandle;
 osMutexId UARTMutexHandle;
 /* USER CODE BEGIN PV */
@@ -72,9 +70,7 @@ static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 void StartDefaultTask(void const * argument);
-extern void StartI2CSendTask(void const * argument);
 extern void StartConsoleTask(void const * argument);
-extern void StartI2CReceiveTask(void const * argument);
 extern void StartMotorControlTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -165,17 +161,9 @@ int main(void)
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  /* definition and creation of I2CSendTask */
-  osThreadDef(I2CSendTask, StartI2CSendTask, osPriorityNormal, 0, 128);
-  I2CSendTaskHandle = osThreadCreate(osThread(I2CSendTask), NULL);
-
   /* definition and creation of ConsoleTask */
   osThreadDef(ConsoleTask, StartConsoleTask, osPriorityNormal, 0, 512);
   ConsoleTaskHandle = osThreadCreate(osThread(ConsoleTask), NULL);
-
-  /* definition and creation of I2CReceiveTask */
-  osThreadDef(I2CReceiveTask, StartI2CReceiveTask, osPriorityNormal, 0, 128);
-  I2CReceiveTaskHandle = osThreadCreate(osThread(I2CReceiveTask), NULL);
 
   /* definition and creation of MotorControlTas */
   osThreadDef(MotorControlTas, StartMotorControlTask, osPriorityNormal, 0, 512);

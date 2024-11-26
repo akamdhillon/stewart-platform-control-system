@@ -11,6 +11,8 @@
 #include "motor.h"
 #include <string>
 
+#define RASPBERRY		1
+
 #define MAX_STRING_SIZE	32
 #define MAX_HEIGHT		140
 #define HALF_HEIGHT		MAX_HEIGHT / 2
@@ -24,13 +26,14 @@ uint32_t debugEnable = 0;
 uint8_t receivedChar;
 int nextMove = 1;
 
-extern volatile uint8_t I2C_Recieved;
 extern StepperMotor motor1;
 extern StepperMotor motor2;
 extern StepperMotor motor3;
 
 extern "C" {
     extern UART_HandleTypeDef huart2;
+    extern volatile int I2C_Received;
+    extern int command;
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
@@ -44,7 +47,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		else {
 			HAL_UART_Transmit(huart, &receivedChar, 1, 100);
 		}
-
 	}
 }
 
@@ -113,46 +115,20 @@ void processCommand(std::string str) {
 		*motor1.stepPtr = 0;
 		*motor2.stepPtr = 0;
 		*motor3.stepPtr = 0;
+		command = 2;
 	}
-	else if (str.find("up") == 0) {
-		motor1.setDirection(1);
-		motor2.setDirection(1);
-		motor3.setDirection(1);
-		if(str.length() > 2) {
-			int num = stoi(str.substr(2));
-			printf("Motor speed %i\r\n", num);
-			motor1.setTarget(num);
-			motor2.setTarget(num);
-			motor3.setTarget(num);
-			motor1.start();
-			motor2.start();
-			motor3.start();
-			debugEnable |= 1;
-		}
-		else {
-			printf("Missing parameter\r\n");
-		}
-		printf("Set to up\r\n");
-	}
-	else if (str.find("down") == 0) {
-		motor1.setDirection(0);
-		motor2.setDirection(0);
-		motor3.setDirection(0);
+	else if (str.find("move") == 0) {
 		if(str.length() > 4) {
 			int num = stoi(str.substr(4));
-			printf("Motor speed %i\r\n", num);
+			printf("Move to %i\r\n", num);
 			motor1.setTarget(num);
 			motor2.setTarget(num);
 			motor3.setTarget(num);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			debugEnable |= 1;
 		}
 		else {
 			printf("Missing parameter\r\n");
 		}
-		printf("Set to down\r\n");
 	}
 
 	else if (str.find("on") == 0) {
@@ -173,81 +149,52 @@ void processCommand(std::string str) {
 			motor1.setTarget(HALF_HEIGHT);
 			motor2.setTarget(HALF_HEIGHT);
 			motor3.setTarget(HALF_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 2:
 			motor1.setTarget(MIN_HEIGHT);
 			motor2.setTarget(MIN_HEIGHT);
 			motor3.setTarget(MIN_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 3:
 			motor1.setTarget(HALF_HEIGHT);
-			motor1.start();
 			break;
 		case 4:
 			motor1.setTarget(MAX_HEIGHT);
 			motor2.setTarget(HALF_HEIGHT);
 			motor3.setTarget(HALF_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 5:
 			motor1.setTarget(MAX_HEIGHT);
 			motor2.setTarget(MAX_HEIGHT);
 			motor3.setTarget(MAX_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 6:
 			motor1.setTarget(HALF_HEIGHT);
-			motor1.start();
 			break;
 		case 7:
 			motor1.setTarget(MIN_HEIGHT);
 			motor2.setTarget(HALF_HEIGHT);
 			motor3.setTarget(HALF_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 8:
 			motor1.setTarget(MIN_HEIGHT);
 			motor2.setTarget(MIN_HEIGHT);
 			motor3.setTarget(MIN_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 9:
 			motor1.setTarget(MIN_HEIGHT);
 			motor2.setTarget(MIN_HEIGHT);
 			motor3.setTarget(MIN_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 10:
 			motor1.setTarget(MAX_HEIGHT);
 			motor2.setTarget(MIN_HEIGHT);
 			motor3.setTarget(MIN_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		case 11:
 			motor1.setTarget(MIN_HEIGHT);
 			motor2.setTarget(MAX_HEIGHT);
 			motor3.setTarget(MAX_HEIGHT);
-			motor1.start();
-			motor2.start();
-			motor3.start();
 			break;
 		default:
 			break;
@@ -268,6 +215,8 @@ void StartConsoleTask(void const * argument) {
 
 	//Start UART Recieve interrupt
 	HAL_UART_Receive_IT(&huart2, &receivedChar, 1);
+
+	int selected_motor = 0;
 
 	while(1) {
 		if(UART2_Received) {
@@ -290,17 +239,38 @@ void StartConsoleTask(void const * argument) {
 			}
 			HAL_UART_Receive_IT(&huart2, &receivedChar, 1);
 		}
+//		if(I2C_Received) {
+//			switch(selected_motor) {
+//			case 1:
+//				motor1.setTarget(received_value);
+//				motor1.start();
+//				break;
+//			case 2:
+//				motor2.setTarget(received_value);
+//				motor2.start();
+//				break;
+//			case 3:
+//				motor3.setTarget(received_value);
+//				motor3.start();
+//				break;
+//			default:
+//				selected_motor = received_value;
+//				break;
+//			}
+//			I2C_Received = 0;
+//			received_flag = 1;
+//		}
 		// Debug prints
 		uint32_t currTick = HAL_GetTick();
 		if (currTick - ticks >= 1000) {
 		    ticks = currTick;
 		    if(debugEnable & 1) {
 				int temp = *motor1.stepPtr;
-				printf("Step1: %i\r\n", temp);
-				temp = *motor2.stepPtr;
-				printf("Step2: %i\r\n", temp);
-				temp = *motor3.stepPtr;
-				printf("Step3: %i\r\n", temp);
+//				printf("Step1: %i\r\n", temp);
+//				temp = *motor2.stepPtr;
+//				printf("Step2: %i\r\n", temp);
+//				temp = *motor3.stepPtr;
+//				printf("Step3: %i\r\n", temp);
 		    }
 		}
 	}
